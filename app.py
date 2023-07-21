@@ -1,4 +1,4 @@
-from flask import Flask, url_for
+from flask import Flask, request, url_for
 from markupsafe import escape
 
 app = Flask(__name__)
@@ -10,9 +10,9 @@ app = Flask(__name__)
 def index():
     return 'Index Page'
 
-@app.route("/login")
-def login():
-    return 'login'
+# @app.route("/login")
+# def login():
+#     return 'login'
 
 @app.route("/hello")
 def hello():
@@ -49,12 +49,46 @@ def projects():
 def about():
     return 'The about page'
 
+
+#######################################################################################################################
+#                                                   HTTPS Methods                                                     #
+#######################################################################################################################
+
+def do_the_login():
+    return 'Do the login'
+
+
+def show_the_login_form():
+    return 'Show the login form'
+
+
+# Using the `methods` argument
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     if request.method == 'POST':
+#         return do_the_login()
+#     else:
+#         return show_the_login_form()
+
+# using shortcut for decorating routes with get(), post()
+
+@app.get('/login')
+def login_get():
+    return show_the_login_form()
+
+
+@app.post('/login')
+def login_post():
+    return do_the_login()
+
+
 #######################################################################################################################
 #                                                   URL Building                                                      #
 #######################################################################################################################
 
 with app.test_request_context():
     print(url_for('index'))
-    print(url_for('login'))
-    print(url_for('login', nest='/'))
+    # print(url_for('login'))
+    # print(url_for('login', nest='/'))
     print(url_for('profile', username='John Doe'))
