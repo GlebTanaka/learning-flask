@@ -101,6 +101,7 @@ def login_get():
 def login_post():
     return do_the_login()
 
+
 #######################################################################################################################
 #                                                   Process Requests                                                  #
 #######################################################################################################################
@@ -115,20 +116,32 @@ def query_example():
     # if key doesn't exist, returns None
     website = request.args.get('website')
     return '''
-              <h1>The language value is: {}</h1>
-              <h1>The framework value is: {}</h1>
-              <h1>The website value is: {}</h1>'''.format(language, framework, website)
+            <h1>The language value is: {}</h1>
+            <h1>The framework value is: {}</h1>
+            <h1>The website value is: {}</h1>'''.format(language, framework, website)
 
 
-@app.route('/form-example')
+@app.route('/form-example', methods=['GET', 'POST'])
 def form_example():
-    return 'Form Data Example'
+    if request.method == 'POST':
+        language = request.form.get('language')
+        framework = request.form.get('framework')
+        return '''
+                <h1>The language value is: {}</h1>
+                <h1>The framework value is: {}</h1>'''.format(language, framework)
+
+    # otherwise handle the GET request
+    return '''
+            <form method="POST">
+                  <div><label>Language: <input type="text" name="language"></label></div>
+                  <div><label>Framework: <input type="text" name="framework"></label></div>
+                  <input type="submit" value="Submit">
+            </form>'''
 
 
 @app.route('/json-example')
 def json_example():
     return 'JSON Object Example'
-
 
 
 #######################################################################################################################
@@ -140,7 +153,6 @@ with app.test_request_context():
     # print(url_for('login'))
     # print(url_for('login', nest='/'))
     print(url_for('profile', username='John Doe'))
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
