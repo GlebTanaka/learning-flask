@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for
 from markupsafe import escape
 
 app = Flask(__name__)
@@ -10,6 +10,10 @@ app = Flask(__name__)
 def index():
     return 'Index Page'
 
+@app.route("/login")
+def login():
+    return 'login'
+
 @app.route("/hello")
 def hello():
     return "Hello, World"
@@ -19,9 +23,9 @@ def hello():
 #######################################################################################################################
 
 @app.route('/user/<username>')
-def show_user_profile(username):
+def profile(username):
     # show the user profile for that user
-    return f'User {escape(username)}'
+    return f'{username}\'s profile'
 
 @app.route('/post/<int:post_id>')
 def show_post(post_id):
@@ -44,3 +48,13 @@ def projects():
 @app.route('/about')
 def about():
     return 'The about page'
+
+#######################################################################################################################
+#                                                   URL Building                                                      #
+#######################################################################################################################
+
+with app.test_request_context():
+    print(url_for('index'))
+    print(url_for('login'))
+    print(url_for('login', nest='/'))
+    print(url_for('profile', username='John Doe'))
