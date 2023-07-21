@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for
+from flask import Flask, request, url_for, render_template
 from markupsafe import escape
 
 app = Flask(__name__)
@@ -14,9 +14,10 @@ def index():
 # def login():
 #     return 'login'
 
-@app.route("/hello")
-def hello():
-    return "Hello, World"
+@app.route("/hello/")
+@app.route("/hello/<name>")
+def hello(name=None):
+    return render_template('hello.html', name=name)
 
 #######################################################################################################################
 #                                                   VARIABLES                                                         #
