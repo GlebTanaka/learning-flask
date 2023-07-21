@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for, render_template
+from flask import Flask, request, url_for, render_template, redirect
 from markupsafe import escape
 
 app = Flask(__name__)
@@ -92,14 +92,25 @@ def show_the_login_form():
 
 # using shortcut for decorating routes with get(), post()
 
-@app.get('/login')
-def login_get():
-    return show_the_login_form()
+# @app.get('/login')
+# def login_get():
+#     return show_the_login_form()
+#
+#
+# @app.post('/login')
+# def login_post():
+#     return do_the_login()
 
-
-@app.post('/login')
-def login_post():
-    return do_the_login()
+# Route for handling the login page logic
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            return redirect(url_for('index'))
+    return render_template('login.html', error=error)
 
 
 #######################################################################################################################
