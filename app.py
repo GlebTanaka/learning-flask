@@ -139,9 +139,48 @@ def form_example():
             </form>'''
 
 
-@app.route('/json-example')
+@app.route('/json-example', methods=['POST'])
 def json_example():
-    return 'JSON Object Example'
+    request_data = request.get_json()
+    # If key is not present in JSON object, request will fail
+    # language = request_data['language']
+    # framework = request_data['framework']
+    # # two keys are needed  because of the nested object
+    # python_version = request_data['version_info']['python']
+    # # an index is needed because of the array
+    # examples = request_data['examples'][0]
+    # boolean_test = request_data['boolean_test']
+
+    language = None
+    framework = None
+    python_version = None
+    examples = None
+    boolean_test = None
+
+    if request_data:
+        if 'language' in request_data:
+            language = request_data['language']
+
+        if 'framework' in request_data:
+            framework = request_data['framework']
+
+        if 'version_info' in request_data:
+            if 'python' in request_data['version_info']:
+                python_version = request_data['version_info']['python']
+
+        if 'examples' in request_data:
+            if (type(request_data['examples']) == list) and (len(request_data['examples']) > 0):
+                examples = request_data['examples'][0]
+
+        if 'boolean_test' in request_data:
+            boolean_test = request_data['boolean_test']
+
+    return '''
+            The language value is: {}
+            The framework value is: {}
+            The Python version is: {}
+            The item a t index 0 in the example list is: {}
+            the boolean value is: {}'''.format(language, framework, python_version, examples, boolean_test)
 
 
 #######################################################################################################################
